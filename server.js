@@ -10,8 +10,8 @@ const dbString = process.env.DB_STRING
 MongoClient.connect(dbString, { useUnifiedTopology: true })
 .then(client => {
     console.log('Connected to Database')
-    const db = client.db('DigimonDB')
-    const digiCollection = db.collection('digiData')
+    const db = client.db('Demo Dat')
+    const digiCollection = db.collection('Demo Day')
 
     nunjucks.configure('views', {
       autoescape: true,
@@ -23,23 +23,23 @@ MongoClient.connect(dbString, { useUnifiedTopology: true })
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.get('/', (req, res) => {
-        db.collection('digiData').find().toArray()
+        db.collection('posts').find().toArray()
           .then(digimon => {
             res.render('index.njk', { digiData: digimon })
           })
           .catch(/* ... */)
       })
 
-      app.post('/digimon', (req, res) => {
+      app.post('/posts', (req, res) => {
         digiCollection.insertOne(req.body)
-          .then(digimon => {
+          .then(posts => {
             res.redirect('/')
           })
           .catch(error => console.error(error))
       })
 
-      app.delete('/digiDelete', (req, res) => {
-        db.collection('digiData').findOneAndDelete({name: req.body.name}, (err, result) => {
+      app.delete('/postDelete', (req, res) => {
+        db.collection('posts').findOneAndDelete({name: req.body.name}, (err, result) => {
           if (err) return res.send(500, err)
           res.send('Message deleted!')
         })
