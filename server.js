@@ -1,53 +1,56 @@
-const express = require('express')
-const app = express()
-const path = require('path')
-const dotenv = require('dotenv').config()
-const nunjucks = require('nunjucks')
-const bodyParser = require('body-parser')
+// set up ======================================================================
+// get all the tools we need
+var express  = require('express');
+var app      = express();
+var port     = process.env.PORT || 8080;
 const MongoClient = require('mongodb').MongoClient
-const dbString = process.env.DB_STRING
+const nunjucks = require('nunjucks')
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
 
-MongoClient.connect(dbString, { useUnifiedTopology: true })
-.then(client => {
-    console.log('Connected to Database')
-    const db = client.db('Demo Dat')
-    const digiCollection = db.collection('Demo Day')
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
+
+var configDB = require('./config/database.js');
+
+var db
+
+// configuration ===============================================================
+mongoose.connect(configDB.url, (err, database) => {
+  if (err) return console.log(err)
+  db = database
+  require('./app/routes.js')(app, passport, db);
+}); // connect to our database
+
+require('./config/passport')(passport); // pass passport for configuration
+
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'))
+
 
     nunjucks.configure('views', {
       autoescape: true,
       express: app
     });
 
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.json())
-    app.use(express.static(path.join(__dirname, 'public')));
+// required for passport
+app.use(session({
+    secret: 'rcbootcamp2021b', // session secret
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
-    app.get('/', (req, res) => {
-        db.collection('posts').find().toArray()
-          .then(digimon => {
-            res.render('index.njk', { digiData: digimon })
-          })
-          .catch(/* ... */)
-      })
 
-      app.post('/posts', (req, res) => {
-        digiCollection.insertOne(req.body)
-          .then(posts => {
-            res.redirect('/')
-          })
-          .catch(error => console.error(error))
-      })
-
-      app.delete('/postDelete', (req, res) => {
-        db.collection('posts').findOneAndDelete({name: req.body.name}, (err, result) => {
-          if (err) return res.send(500, err)
-          res.send('Message deleted!')
-        })
-      })
-
-      const isProduction = process.env.NODE_ENV === 'production'
-      const port = isProduction ? 7500 : 3000
-      app.listen(port, function () {
-        console.log(`listening on ${port}`)
-      })
-})
+// launch ======================================================================
+app.listen(port);
+console.log('The magic happens on port ' + port);
