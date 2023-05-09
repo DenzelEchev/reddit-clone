@@ -1,3 +1,4 @@
+const ObjectId = require('mongodb').ObjectId
 module.exports = function(app, passport, db) {
 
     // normal routes ===============================================================
@@ -8,10 +9,10 @@ module.exports = function(app, passport, db) {
         });
     
         // PROFILE SECTION =========================
-        app.get('/profile', isLoggedIn, function(req, res) {
+        app.get('/loghome', isLoggedIn, function(req, res) {
             db.collection('chat-messages').find().toArray((err, result) => {
               if (err) return console.log(err)
-              res.render('profile.ejs', {
+              res.render('loghome.njk', {
                 user : req.user,
                 messages: result
               })
@@ -66,8 +67,8 @@ module.exports = function(app, passport, db) {
           })
         })
     
-        app.delete('/message-delete', (req, res) => {
-          db.collection('chat-messages').findOneAndDelete({mood: req.body.mood, msg: req.body.msg}, (err, result) => {
+        app.delete('/delete', (req, res) => {
+          db.collection('reddit-posts').findOneAndDelete({_id: ObjectId(req.body.id)}, (err, result) => {
             if (err) return res.send(500, err)
             res.send('Message deleted!')
           })
@@ -81,12 +82,12 @@ module.exports = function(app, passport, db) {
             // LOGIN ===============================
             // show the login form
             app.get('/login', function(req, res) {
-                res.render('login.ejs', { message: req.flash('loginMessage') });
+                res.render('login.njk', { message: req.flash('loginMessage') });
             });
     
             // process the login form
             app.post('/login', passport.authenticate('local-login', {
-                successRedirect : '/profile', // redirect to the secure profile section
+                successRedirect : '/loghome', // redirect to the secure profile section
                 failureRedirect : '/login', // redirect back to the signup page if there is an error
                 failureFlash : true // allow flash messages
             }));
@@ -94,12 +95,12 @@ module.exports = function(app, passport, db) {
             // SIGNUP =================================
             // show the signup form
             app.get('/signup', function(req, res) {
-                res.render('signup.ejs', { message: req.flash('signupMessage') });
+                res.render('signup.njk', { message: req.flash('signupMessage') });
             });
     
             // process the signup form
             app.post('/signup', passport.authenticate('local-signup', {
-                successRedirect : '/profile', // redirect to the secure profile section
+                successRedirect : '/loghome', // redirect to the secure profile section
                 failureRedirect : '/signup', // redirect back to the signup page if there is an error
                 failureFlash : true // allow flash messages
             }));
@@ -117,7 +118,7 @@ module.exports = function(app, passport, db) {
             user.local.email    = undefined;
             user.local.password = undefined;
             user.save(function(err) {
-                res.redirect('/profile');
+                res.redirect('/loghome');
             });
         });
     
