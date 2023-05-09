@@ -9,8 +9,9 @@ npm install
 ```
 ## Things that I am working on right now
 [] Making sure all the routes once logged in don't log you out
-[] Getting the final structure of the website
+[] Getting the final structure of the website(css and njk)
 [] Looking into uploading files other than text
 [] Add tags to sort out post in a search
 [] Fixing up the the older methods that was in old mongo boiler plate to bring them into the now
 [] Work on tracking user data and associating it with the post
+[] Work on feature to set apart from reddit
