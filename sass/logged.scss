@@ -1,0 +1,11 @@
+@import 'style.scss';
+
+main{
+    font-size: 1.5rem;
+    background: $secondary;
+    .scroll-header{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2rem;
+    }
+}

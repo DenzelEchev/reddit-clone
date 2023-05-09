@@ -1,6 +1,6 @@
 {% extends "layouts/base.njk" %}
 {% block head %}
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/logged.css">
     <description></description>
     <title>Home Page</title>
 {% endblock %}
@@ -11,9 +11,14 @@
 
 {% block content %}
     <main>
-        {% for item in sequence %}
+        <section class="scroll-header">
+            <p>User Name</p>
+            <button><a href="/post"> New Post +</a></button>
+        </section>
+        {% for post in posts %}
             <div>
-                <p>this</p>
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.posttext}}</p>
             </div>
         {% endfor %}
     </main>

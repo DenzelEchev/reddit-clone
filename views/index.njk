@@ -7,9 +7,10 @@
 
 {% block content %}
     <main>
-        {% for item in sequence %}
+        {% for post in posts %}
             <div>
-                <p>this</p>
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.posttext}}</p>
             </div>
         {% endfor %}
     </main>

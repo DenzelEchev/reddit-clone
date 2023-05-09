@@ -5,16 +5,26 @@ module.exports = function(app, passport, db) {
     
         // show the home page (will also have our login links)
         app.get('/', function(req, res) {
-            res.render('index.njk');
-        });
+          db.collection('posts').find().toArray((err, result) => {
+            if (err) return console.log(err)
+            res.render('index.njk', {
+              user : req.user,
+              posts: result
+            })
+          })
+      });
+
+        app.get('/post', function(req, res) {
+          res.render('post.njk');
+      });
     
         // PROFILE SECTION =========================
         app.get('/loghome', isLoggedIn, function(req, res) {
-            db.collection('chat-messages').find().toArray((err, result) => {
+            db.collection('posts').find().toArray((err, result) => {
               if (err) return console.log(err)
               res.render('loghome.njk', {
                 user : req.user,
-                messages: result
+                posts: result
               })
             })
         });
@@ -27,48 +37,19 @@ module.exports = function(app, passport, db) {
             res.redirect('/');
         });
     
-    // message board routes ===============================================================
+    // posts routes ===============================================================
     
-        app.post('/mood-post', (req, res) => {
-          db.collection('chat-messages').save({mood: req.body.mood, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
-            if (err) return console.log(err)
-            console.log('saved to database')
-            res.redirect('/profile')
-          })
+      app.post('/reddit-post', (req, res) => {
+        db.collection('posts').insertOne({title: req.body.title, posttext: req.body.posttext}, (err, result) => {
+          if (err) return console.log(err)
+          console.log('saved to database')
+          res.redirect('/loghome')
         })
+      })
     
-        app.put('/chat-post', (req, res) => {
-          db.collection('chat-messages')
-          .findOneAndUpdate({mood: req.body.mood, msg: req.body.msg}, {
-            $set: {
-              thumbUp:req.body.thumbUp + 1
-            }
-          }, {
-            sort: {_id: -1},
-            upsert: true
-          }, (err, result) => {
-            if (err) return res.send(err)
-            res.send(result)
-          })
-        })
-    
-        app.put('/thumbDown', (req, res) => {
-          db.collection('chat-messages')
-          .findOneAndUpdate({mood: req.body.mood, msg: req.body.msg}, {
-            $set: {
-              thumbUp:req.body.thumbUp - 1
-            }
-          }, {
-            sort: {_id: -1},
-            upsert: true
-          }, (err, result) => {
-            if (err) return res.send(err)
-            res.send(result)
-          })
-        })
     
         app.delete('/delete', (req, res) => {
-          db.collection('reddit-posts').findOneAndDelete({_id: ObjectId(req.body.id)}, (err, result) => {
+          db.collection('posts').findOneAndDelete({_id: ObjectId(req.body.id)}, (err, result) => {
             if (err) return res.send(500, err)
             res.send('Message deleted!')
           })
