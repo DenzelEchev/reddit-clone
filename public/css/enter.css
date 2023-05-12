@@ -41,26 +41,18 @@ main {
   width: 75%;
 }
 
-main {
-  font-size: 1.5rem;
-}
-main .scroll-header {
+.log-form {
+  width: 50%;
   display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.log-form div {
+  display: flex;
+  justify-content: space-around;
 }
 
-.post-card {
-  border: 3px solid rgb(74, 74, 74);
-  background: rgb(41, 41, 41);
-  margin-bottom: 1rem;
-  color: rgb(255, 255, 255);
-}
-.post-card h3 {
-  padding-left: 2rem;
-}
-.post-card p {
-  text-align: center;
-}
-
-/*# sourceMappingURL=logged.css.map */
+/*# sourceMappingURL=enter.css.map */

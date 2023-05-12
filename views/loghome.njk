@@ -16,9 +16,12 @@
             <button><a href="/post"> New Post +</a></button>
         </section>
         {% for post in posts %}
-            <div>
+            <div class="post-card">
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.posttext}}</p>
+                <div>
+                    <span>comments</span>
+                </div>
             </div>
         {% endfor %}
     </main>

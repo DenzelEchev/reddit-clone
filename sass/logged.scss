@@ -2,10 +2,21 @@
 
 main{
     font-size: 1.5rem;
-    background: $secondary;
     .scroll-header{
         display: flex;
         justify-content: space-between;
         padding: 0 2rem;
+    }
+}
+.post-card{
+    border: 3px solid $secondary;
+    background: rgb(41, 41, 41);
+    margin-bottom: 1rem;
+    color: $text-color;
+    h3{
+        padding-left: 2rem;
+    }
+    p{
+        text-align: center;
     }
 }

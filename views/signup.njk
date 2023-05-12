@@ -1,12 +1,12 @@
 {% extends "layouts/base.njk" %}
 {% block head %}
-    <link rel="stylesheet" href="css/style.css">
-    <description></description>
+    <link rel="stylesheet" href="css/enter.css">
     <title>Home Page</title>
 {% endblock %}
 
 {% block content %}
-        <form action="/signup" method="post">
+<section class="log-form">
+    <form action="/signup" method="post">
         <div>
             <label>Email</label>
             <input type="text" name="email" placeholder="User">
@@ -19,8 +19,7 @@
         <button type="submit">Login</button>
     </form>
 
-    <hr>
-
     <p>Already have an account? <a href="/login">Login</a></p>
     <p>Or go <a href="/">home</a>.</p>
+</section>
 {% endblock %}
