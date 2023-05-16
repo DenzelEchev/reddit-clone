@@ -15,3 +15,7 @@ npm install
 [] Fixing up the the older methods that was in old mongo boiler plate to bring them into the now
 [] Work on tracking user data and associating it with the post
 [] Work on feature to set apart from reddit
+
+
+# Update!
+This Project has been dropped and will be picked up at a later date. Bee on the look out for the Tekken companion app.
