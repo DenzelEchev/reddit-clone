@@ -19,3 +19,5 @@ npm install
 
 # Update!
 This Project has been dropped and will be picked up at a later date. Bee on the look out for the Tekken companion app.
+I will be using React on the refresh of this repo
+
